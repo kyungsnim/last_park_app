@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "331276885552",
+    "firebase_url": "https://last-park.firebaseio.com",
+    "project_id": "last-park",
+    "storage_bucket": "last-park.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331276885552:android:243b5842650ebd4663d7f5",
+        "android_client_info": {
+          "package_name": "com.kyungsnim.last_park_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "331276885552-i57nnsjlfeda4o1a42oudjq0b2vgr4q4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeI2UOslXwSrExw8lRcQYNNMDE1psm4X0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "331276885552-i57nnsjlfeda4o1a42oudjq0b2vgr4q4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
