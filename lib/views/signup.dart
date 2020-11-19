@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:last_park_app/shared/globals.dart';
 import 'package:provider/provider.dart';
 import 'package:last_park_app/services/firebase_provider.dart';
 import 'package:last_park_app/views/signin.dart';
@@ -87,7 +88,7 @@ class SignUpState extends State<SignUp> {
         body: _isLoading
             ? Center(
                 child: CircularProgressIndicator(
-                  backgroundColor: Colors.indigo,
+                  backgroundColor: Global.sRed,
                 ),
               )
             : Form(
@@ -102,7 +103,7 @@ class SignUpState extends State<SignUp> {
                         padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
                         child: TextFormField(
                           controller: _emailCon,
-                          cursorColor: Colors.indigo,
+                          cursorColor: Global.sRed,
                           validator: (val) {
                             if (val.isEmpty) {
                               return '이메일주소를 입력하세요';
@@ -111,8 +112,8 @@ class SignUpState extends State<SignUp> {
                           decoration: InputDecoration(
                               focusedBorder: UnderlineInputBorder(
                                   // underline 색상 변경
-                                  borderSide: BorderSide(color: Colors.indigo)),
-                              icon: Icon(Icons.email, color: Colors.indigo),
+                                  borderSide: BorderSide(color: Global.sRed)),
+                              icon: Icon(Icons.email, color: Global.sRed),
                               hintText: '이메일'),
                           onChanged: (val) {
                             email = val;
@@ -124,7 +125,7 @@ class SignUpState extends State<SignUp> {
                         child: TextFormField(
                           controller: _pwCon,
                           obscureText: true, // 비밀번호 가리기
-                          cursorColor: Colors.indigo,
+                          cursorColor: Global.sRed,
                           validator: (val) {
                             if (val.length < 6) {
                               return '6자 이상의 비밀번호를 사용하세요.';
@@ -135,11 +136,11 @@ class SignUpState extends State<SignUp> {
                           decoration: InputDecoration(
                               focusedBorder: UnderlineInputBorder(
                                   // underline 색상 변경
-                                  borderSide: BorderSide(color: Colors.indigo)),
-                              focusColor: Colors.indigo,
+                                  borderSide: BorderSide(color: Global.sRed)),
+                              focusColor: Global.sRed,
                               icon: Icon(
                                 Icons.vpn_key,
-                                color: Colors.indigo,
+                                color: Global.sRed,
                               ),
                               hintText: '비밀번호'),
                           onChanged: (val) {
