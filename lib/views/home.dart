@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:last_park_app/models/park_model.dart';
@@ -26,6 +27,29 @@ class _HomeState extends State<Home> {
   PickedFile _imageFile; // 카메라/갤러리에서 사진 가져올 때 사용함 (image_picker)
   final ImagePicker _picker = ImagePicker(); // 카메라/갤러리에서 사진 가져올 때 사용함 (image_picker)
 
+  // static MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+  //   keywords: <String>['flutter', 'firebase', 'admob'],
+  //   testDevices: <String>[],
+  // );
+  //
+  // BannerAd bannerAd = BannerAd(
+  //   adUnitId: BannerAd.testAdUnitId,
+  //   size: AdSize.banner,
+  //   targetingInfo: targetingInfo,
+  //   listener: (MobileAdEvent event) {
+  //     print("BannerAd event is $event");
+  //   },
+  // );
+
+  @override
+  void initState() {
+    // FirebaseAdMob.instance.initialize(
+    //     appId: Platform.isIOS
+    //         ? 'ca-app-pub-3940256099942544~1458002511' // iOS Test App ID
+    //         : 'ca-app-pub-3940256099942544/2934735716'); // Android Test App ID
+    // bannerAd..load()..show();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -66,10 +90,7 @@ class _HomeState extends State<Home> {
                     ),
 
                     SizedBox(height: 40,),
-                    ByText(),
-                    SizedBox(height: 10,),
-                    ByCamera(),
-                    SizedBox(height: 10,),
+                    Container(height: 120, child: inputData()),
                     StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance.collection('users').doc(fp.getUser().email).collection(fp.getUser().email).orderBy('createdAt', descending: true).snapshots(), // 1
                         builder: (context, snapshot) { // 2
@@ -95,114 +116,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget bottomSheet() {
-    return Container(
-        height: 100,
-        width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 20
-        ),
-        child: Column(
-          children: <Widget>[
-            Text(
-              'Choose Profile photo',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            SizedBox(height: 20,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                FlatButton.icon(
-                  icon: Icon(Icons.camera, size: 50,),
-                  onPressed: () {
-                    takePhoto(ImageSource.camera);
-                  },
-                  label: Text('Camera', style: TextStyle(fontSize: 20),),
-                ),
-//                FlatButton.icon(
-//                  icon: Icon(Icons.photo_library, size: 50,),
-//                  onPressed: () {
-//                    takePhoto(ImageSource.gallery);
-//                  },
-//                  label: Text('Gallery', style: TextStyle(fontSize: 20),),
-//                )
-              ],
-            )
-          ],
-        )
-    );
-  }
-
-  takePhoto(ImageSource source) async {
-    Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.camera]);
-    print('per1 : $permissions');
-    final pickedFile = await _picker.getImage(source: source);
-    setState(() {
-      _imageFile = pickedFile;
-    });
-  }
-
-  Widget imageProfile() {
-    return Center(
-      child: Stack(
-        children: <Widget>[
-          CircleAvatar(
-            radius: 80,
-            backgroundImage: _imageFile == null
-                ? AssetImage('assets/profile.jfif')
-                : FileImage(File(_imageFile.path)),
-          ),
-          Positioned(
-              bottom: 20,
-              right: 20,
-              child: InkWell(
-                onTap: () {
-                  showModalBottomSheet(context: context, builder: ((builder) => bottomSheet()));
-                },
-                child: Icon(
-                  Icons.camera_alt,
-                  color: Global.sBlue,
-                  size: 40,
-                ),
-              )
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget ByCamera() {
-    return Row(
-      children: [
-        Expanded(
-            child: Container(
-              color: Colors.blue,
-              child: _imageFile == null
-                  ? Container(height: 50, color: Colors.grey, child: Center(child: Text('등록된 사진 없음', style: TextStyle(color: Global.sWhite),)))
-                  : FileImage(File(_imageFile.path)),
-            )
-        ),
-        SizedBox(width: 10),
-        Container(
-          height: 50,
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: RaisedButton(
-              color: Global.sBlue,
-              onPressed: () {
-                takePhoto(ImageSource.camera);
-//              showModalBottomSheet(context: context, builder: ((builder) => bottomSheet()));
-              },
-              child: Icon(Icons.camera_alt, color: Colors.white,)
-          ),
-        )
-      ],
-    );
-  }
-  Widget ByText() {
-    return Row(
+  Widget inputData() {
+    return Column(
       children: [
         Expanded(
           child: Container(
@@ -219,17 +134,34 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        SizedBox(width: 10),
-        Container(
-          height: 50,
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: RaisedButton(
-            color: Global.sBlue,
-            onPressed: () {
-              addParkData(fp.getUser().email, _whereIs.text);
-            },
-            child: Icon(Icons.create, color: Global.sWhite,),
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: RaisedButton(
+                color: Global.sBlue,
+                onPressed: () {
+                  addParkData(fp.getUser().email, _whereIs.text);
+                },
+                child: Icon(Icons.create, color: Global.sWhite,),
+              ),
+            ),
+
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: RaisedButton(
+                  color: Global.sBlue,
+                  onPressed: () {
+                    // takePhoto(ImageSource.camera);
+//              showModalBottomSheet(context: context, builder: ((builder) => bottomSheet()));
+                  },
+                  child: Icon(Icons.camera_alt, color: Colors.white,)
+              ),
+            )
+          ],
         )
       ],
     );
@@ -255,11 +187,7 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Row(
               children: [
-                Text('장소', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Global.sBlue),),
-                SizedBox(width: 10,),
-                Text(park.whereIs, style: TextStyle(fontSize: 12),),
-                SizedBox(width: 10,),
-                Text('구역', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Global.sBlue),),
+                Text('층 및 구역', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Global.sBlue),),
                 SizedBox(width: 10,),
                 Text(park.whereIs, style: TextStyle(fontSize: 12),),
               ],

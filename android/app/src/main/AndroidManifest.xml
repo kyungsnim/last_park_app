@@ -43,6 +43,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544/2934735716" />
+<!--            android:value="ca-app-pub-6109556651195087~8378172956" />-->
     </application>
     <uses-permission android:name="android.permission.CAMERA"/>
 </manifest>

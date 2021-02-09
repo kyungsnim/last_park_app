@@ -10,12 +10,12 @@ class ParkModel {
     this.id, this.email, this.whereIs, this.createdAt
   });
 
-  factory ParkModel.fromDocument(DocumentSnapshot doc, Map docdata) {
+  factory ParkModel.fromDocument(DocumentSnapshot doc, Map docData) {
     return ParkModel(
       id: doc.id,
-      email: docdata['email'],
-      whereIs: docdata['text'],
-      createdAt: docdata['createdAt']
+      email: docData['email'],
+      whereIs: docData['text'],
+      createdAt: docData['createdAt']
     );
   }
 }
