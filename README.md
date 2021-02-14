@@ -14,3 +14,9 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+# admob 관련 버그 해결 방법
+## 현상 : 실행시 제대로 실행이 안됨
+## 해결 방법 : Podfile에 아래 문구 작성
+  # Try adding this
+  pod 'Google-Mobile-Ads-SDK', '~> 7.69.0'

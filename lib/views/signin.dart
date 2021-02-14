@@ -31,6 +31,7 @@ class SignInState extends State<SignIn> {
   void initState() {
     super.initState();
     getRememberInfo();
+
   }
 
   @override
@@ -70,6 +71,9 @@ class SignInState extends State<SignIn> {
         _emailCon.text = (prefs.getString('userEmail') ?? "");
         _pwCon.text = (prefs.getString('userPassword') ?? "");
       });
+    }
+    if(_emailCon.text != "" && _pwCon.text != "") {
+      signIn();
     }
   }
 
