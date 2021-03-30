@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 
 // import 'package:firebase_admob/firebase_admob.dart';
@@ -13,6 +13,7 @@ import 'package:last_park_app/services/database.dart';
 import 'package:last_park_app/shared/globals.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -32,28 +33,11 @@ class _HomeState extends State<Home> {
   Future<File> imageFile;
   ImagePicker imagePicker;
   var index;
-
-  static MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    keywords: <String>['flutter', 'firebase', 'admob'],
-    testDevices: <String>[],
-  );
-
-  BannerAd bannerAd = BannerAd(
-    adUnitId: BannerAd.testAdUnitId,
-    size: AdSize.banner,
-    targetingInfo: targetingInfo,
-    listener: (MobileAdEvent event) {
-      print("BannerAd event is $event");
-    },
-  );
+  var admobBannerId;
 
   @override
   void initState() {
-    FirebaseAdMob.instance.initialize(
-        appId: Platform.isIOS
-            ? 'ca-app-pub-3940256099942544~1458002511' // iOS Test App ID
-            : 'ca-app-pub-3940256099942544/2934735716'); // Android Test App ID
-    bannerAd..load()..show();
+    admobBannerId = Platform.isIOS ? 'ca-app-pub-6109556651195087/8636552625' : 'ca-app-pub-6109556651195087/7354414059';
     imagePicker = ImagePicker();
     super.initState();
     index = 0;
@@ -106,8 +90,17 @@ class _HomeState extends State<Home> {
                           height: 40,
                         ),
                         Container(height: 120, child: inputData()),
-                        SizedBox(
-                          height: 10,
+                        SizedBox(height: 10),
+                        Center(
+                          child: Container(
+                            child: AdmobBanner(
+                              adUnitId: admobBannerId,//'ca-app-pub-6109556651195087~8378172956', //
+                              adSize: AdmobBannerSize.BANNER,
+                              onBannerCreated:
+                                  (AdmobBannerController controller) {
+                              },
+                            ),
+                          ),
                         ),
                         StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
@@ -133,12 +126,50 @@ class _HomeState extends State<Home> {
                                 ),
                               );
                             }),
-                        Container(height: 35),
+                        Center(
+                          child: Container(
+                            child: AdmobBanner(
+                              adUnitId: admobBannerId,//'ca-app-pub-6109556651195087~8378172956', //
+                              adSize: AdmobBannerSize.BANNER,
+                              onBannerCreated:
+                                  (AdmobBannerController controller) {
+                              },
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                   color: Colors.white),
         ));
+  }
+
+  void showSnackBar(String content) {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text(content),
+        duration: Duration(milliseconds: 1500),
+      ),
+    );
+  }
+
+  void handleEvent(
+      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+    switch (event) {
+      case AdmobAdEvent.loaded:
+        showSnackBar('New Admob $adType Ad loaded!');
+        break;
+      case AdmobAdEvent.opened:
+        showSnackBar('Admob $adType Ad opened!');
+        break;
+      case AdmobAdEvent.closed:
+        showSnackBar('Admob $adType Ad closed!');
+        break;
+      case AdmobAdEvent.failedToLoad:
+        showSnackBar('Admob $adType failed to load. :(');
+        break;
+      default:
+    }
   }
 
   Widget inputData() {
@@ -159,7 +190,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         Row(
-          mainAxisAlignment: Platform.isIOS ? MainAxisAlignment.center : MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
               height: 50,
@@ -175,20 +206,20 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            Platform.isIOS ? Container() : Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width * 0.4,
-              child: RaisedButton(
-                  color: Global.sBlue,
-                  onPressed: () {
-                    captureImageWithCamera();
-                    // takePhoto(ImageSource.camera);
+            Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: RaisedButton(
+                        color: Global.sBlue,
+                        onPressed: () {
+                          captureImageWithCamera();
+                          // takePhoto(ImageSource.camera);
 //              showModalBottomSheet(context: context, builder: ((builder) => bottomSheet()));
-                  },
-                  child: Icon(
-                    Icons.camera_alt,
-                    color: Colors.white,
-                  )),
+                        },
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                        )),
             )
           ],
         )

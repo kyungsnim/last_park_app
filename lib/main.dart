@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:last_park_app/services/firebase_provider.dart';
 import 'package:last_park_app/views/auth_page.dart';
@@ -5,8 +6,15 @@ import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // admob_flutter area start
+  Admob.initialize();
+  // Run this before displaying any ad.
+  // await Admob.requestTrackingAuthorization();
+  // admob_flutter area end
+
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
